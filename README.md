@@ -1,6 +1,6 @@
 # csElectricFieldSimulator
 
-Small application i made to practice some things i learnt in physics class!
+Small application i made to practice some things i learnt in physics class! \
 Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 
 ## Controls
@@ -11,4 +11,5 @@ Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 - Middle click to get rid of all charges
 
 ## Note
-Visual Studio said something about missing files when i created this repo, but that might be the nuget package.. make an issue and i will add whatever is missing!
+Make sure you at least have the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
+Also, Visual Studio said something about missing files when i created this repo, and im not exactly sure what's missing... If you run into any problems with missing files, make an issue and i will add whatever is missing!
