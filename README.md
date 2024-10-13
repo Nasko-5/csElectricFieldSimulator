@@ -14,4 +14,4 @@ Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 
 ## Note
 Make sure you at least have the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
-Also, Visual Studio said something about missing files when i created this repo, and im not exactly sure what's missing... If you run into any problems with missing files, make an issue and i will add whatever is missing!
+Also, Visual Studio said something about missing files when i created this repo, and im not exactly sure what's missing... If you run into any problems, make an issue and i will fix it!
