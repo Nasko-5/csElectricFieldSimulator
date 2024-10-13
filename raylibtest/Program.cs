@@ -137,7 +137,7 @@ List<Particle> generateRandomParticles(int particleCount)
         if (random.Next(100) > 50) q *= -1;
 
         // Create new particle to add to list
-        Particle particle = new Particle(q, new Vector2(100 + random.Next(screenWidth - 100), 100 + random.Next(screenHeight - 100)), 15    );
+        Particle particle = new Particle(q, new Vector2(random.Next(2000+screenWidth) - 1000, random.Next(2000+screenHeight)-1000), 15    );
 
         particles.Add(particle);
     }
@@ -146,9 +146,14 @@ List<Particle> generateRandomParticles(int particleCount)
 
 List<Particle> particles = new List<Particle>();
 
-List<Probe> probes;
+List<Probe> probes = new();
 
 Particle draggedParticle = null;
+
+Vector2 offset = new(0);
+Vector2? cameraDragInitialPos = null;
+
+bool changed = false;
 
 while (!Raylib.WindowShouldClose())
 {
@@ -160,7 +165,7 @@ while (!Raylib.WindowShouldClose())
     {
         foreach (Particle particle in particles)
         {
-            if (particle.isOver(Raylib.GetMousePosition()))
+            if (particle.isOver(Raylib.GetMousePosition() - offset))
             {
                 particle.isBeingDragged = true;
                 draggedParticle = particle;
@@ -169,15 +174,16 @@ while (!Raylib.WindowShouldClose())
 
         if (draggedParticle == null)
         {
-            particles.Add(new Particle(Constants.e, Raylib.GetMousePosition(), 15));
+            particles.Add(new Particle(Constants.e, Raylib.GetMousePosition() - offset, 15));
         }
+        changed = true;
     }
     else if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_RIGHT_BUTTON))
     {
         int pc = particles.Count;
         for (int i = 0; i < pc; i++)
         {
-            if (particles[i].isOver(Raylib.GetMousePosition()))
+            if (particles[i].isOver(Raylib.GetMousePosition()-offset))
             {
                 particles.Remove(particles[i]);
                 break;
@@ -187,38 +193,68 @@ while (!Raylib.WindowShouldClose())
 
         if (pc == npc)
         {
-            particles.Add(new Particle(-Constants.e, Raylib.GetMousePosition(), 15));
+            particles.Add(new Particle(-Constants.e, Raylib.GetMousePosition() - offset, 15));
         }
-        
-    } else if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
+        changed = true;
+
+    } else if(Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
+    {
+        if (draggedParticle != null)
+        {
+            draggedParticle.Position = Raylib.GetMousePosition()-offset;
+            changed = true;
+        }
+    } 
+    
+    else if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
     {
         if (draggedParticle != null)
         {
             draggedParticle.isBeingDragged = false;
             draggedParticle = null;
+            changed = true;
         }
     }
 
+    // Middle mouse button stuff
     if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_MIDDLE_BUTTON))
+    {
+        if (cameraDragInitialPos == null)
+        {
+            cameraDragInitialPos = Raylib.GetMousePosition();
+        }
+
+    } else if (Raylib.IsMouseButtonDown(Raylib.MOUSE_MIDDLE_BUTTON) && Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
     {
         particles.Clear();
     }
-    else if (Raylib.IsKeyPressed(KeyboardKey.KEY_ONE))
+    if (Raylib.IsMouseButtonDown(Raylib.MOUSE_MIDDLE_BUTTON) )
+    {
+        if (cameraDragInitialPos != null)
+            offset += (Vector2)(cameraDragInitialPos - Raylib.GetMousePosition())/10;
+    } 
+    if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_MIDDLE_BUTTON))
+    {
+        if (cameraDragInitialPos != null)
+        {
+            cameraDragInitialPos = null;
+        }
+    }
+
+    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ONE))
     {
         particles.AddRange(generateRandomParticles(15));
+        changed = true;
     }
 
-    if (draggedParticle != null)
-    {
-        draggedParticle.Position = Raylib.GetMousePosition();
-    }
 
+    Raylib.DrawRectangleLinesEx(new Rectangle(-1000+offset.X, -1000+offset.Y, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
 
     if (particles.Count != 0)
     {
-        probes = SimParallel(particles);
-        Visualization.DrawParticles(particles);
-        Visualization.DrawFieldLines(probes);
+        if (changed) { probes = SimParallel(particles); changed = false; }
+        Visualization.DrawParticles(particles, offset);
+        Visualization.DrawFieldLines(probes, offset);
     }
 
     Raylib.EndDrawing();

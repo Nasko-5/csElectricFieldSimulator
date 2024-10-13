@@ -7,32 +7,33 @@ namespace raylibtest
     public static class Visualization
     {
 
-        public static void DrawProbes(List<Probe> probes)
+        public static void DrawProbes(List<Probe> probes, Vector2 offset)
         {
             foreach (Probe probe in probes) 
             { 
                 foreach (Vector2 pos in probe.Path)
                 {
-                    Raylib.DrawCircle((int)pos.X, (int)pos.Y, probe.Size, probe.ParticleColor);
+                    Raylib.DrawCircle((int)pos.X + (int)offset.X, (int)pos.Y + (int)offset.Y, probe.Size, probe.ParticleColor);
                 }
             }
         }
 
-        public static void DrawParticles(List<Particle> particles)
+        public static void DrawParticles(List<Particle> particles, Vector2 offset)
         {
-            foreach (Particle particle in particles) particle.Draw();
+            foreach (Particle particle in particles) particle.Draw(offset);
         }
 
-        public static void DrawFieldLines(List<Probe> probes)
+        public static void DrawFieldLines(List<Probe> probes, Vector2 offset)
         {
             foreach (Probe probe in probes)
             {
                 for (int index = 0; index < probe.Path.Count - 1; index++)
                 {
-
-                    Raylib.DrawLine((int)probe.Path[index].X, (int)probe.Path[index].Y,
-                                    (int)probe.Path[index + 1].X, (int)probe.Path[index + 1].Y,
-                                    Raylib.WHITE);
+                    Raylib.DrawLine(
+                        (int)probe.Path[index].X + (int)offset.X, (int)probe.Path[index].Y + (int)offset.Y,       
+                        (int)probe.Path[index + 1].X + (int)offset.X, (int)probe.Path[index + 1].Y + (int)offset.Y,
+                        Raylib.WHITE
+                    );
                 }
             }
         }
@@ -53,16 +54,6 @@ namespace raylibtest
         {
             Raylib.DrawRectangle((int)Pos.X, (int)Pos.Y, 100, 25, Raylib.WHITE);
             Raylib.DrawFPS(10, 10);
-        }
-
-        public static void ClearScreen(Color color)
-        {
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(color);
-            Raylib.EndDrawing();
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(color);
-            Raylib.EndDrawing();
         }
     }
 }

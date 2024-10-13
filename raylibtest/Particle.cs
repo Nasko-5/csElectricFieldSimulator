@@ -53,9 +53,9 @@ namespace raylibtest
             return RayMath.Vector2Distance(mousePos, Position) <= Size;
         }
 
-        public void Draw()
+        public void Draw(Vector2 offset)
         {
-            Raylib.DrawCircle((int)Position.X, (int)Position.Y, Size, ParticleColor);
+            Raylib.DrawCircle((int)Position.X + (int)offset.X, (int)Position.Y + (int)offset.Y, Size, ParticleColor);
         }
 
     }

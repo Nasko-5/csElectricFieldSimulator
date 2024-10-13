@@ -41,9 +41,9 @@ namespace raylibtest
             return probes;
         }
 
-        public static Particle? nearestParticle(List<Particle> particles, Probe probe)
+        public static Particle nearestParticle(List<Particle> particles, Probe probe)
         {
-            Particle? closest = null;
+            Particle closest = null;
             float minDistance = float.MaxValue;
 
             foreach (var particle in particles) //Where(p => p.Charge < 0)
@@ -63,7 +63,7 @@ namespace raylibtest
         {
 
             // check if probe is outside of the window
-            return !(newPos.X < -200 || newPos.Y < -200 || newPos.X > screenWidth + 200 || newPos.Y > screenHeight + 200);
+            return !(newPos.X < -1000 || newPos.Y < -1000 || newPos.X > screenWidth + 1000 || newPos.Y > screenHeight + 1000);
         }
         public static bool tooCloseToParticle(List<Particle> list, Vector2 newPos)
         {
