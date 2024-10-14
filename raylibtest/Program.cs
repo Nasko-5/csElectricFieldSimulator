@@ -9,8 +9,10 @@ const int screenHeight = 800;
 
 Random random = new Random();
 
+Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
 Raylib.InitWindow(screenWidth, screenHeight, "Electric Field Simulator");
 Raylib.SetTargetFPS(60);
+
 
 Console.WriteLine(new string('*', 40));
 
