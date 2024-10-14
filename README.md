@@ -10,7 +10,8 @@ Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 - Left click to add a negative charge
 - Right click on a charge to remove it
 - Hold left click on a charge to move it around
-- Middle click to get rid of all charges
+- Hold middle click to move around the simulation
+- Left Shift + Middle click to clear all charges
 
 ## Note
 Make sure you at least have the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
