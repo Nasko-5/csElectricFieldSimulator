@@ -2,17 +2,22 @@
 
 ![Gif showcasing the program](https://github.com/user-attachments/assets/0718bbc4-e1bd-47b5-ad11-239344e5ab9c)
 
-Small application i made to practice some things i learnt in physics class! \
+Small application I made to practice some things I learnt in physics class! \
 Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 
 ## Controls
-- Right click to add a positive charge
-- Left click to add a negative charge
-- Right click on a charge to remove it
-- Hold left click on a charge to move it around
-- Hold middle click to move around the simulation
-- Left Shift + Middle click to clear all charges
+### Editing
+- **Right-click** to add a positive charge.
+- **Left-click** to add a negative charge.
+- **Right-click** on a charge to remove it.
+- **Left Shift + Middle-click** to clear all charges.
+- **Hold Middle-click** on top of a charge and move the mouse up/down to change its strength.
+- **Hold Middle-click** on top of a charge + **Right-click** to set the charge to 0.
+
+### Movement
+- **Hold Left-click** on a charge to move it around.
+- **Hold Middle-click** in empty space and move the mouse to pan around the simulation.
 
 ## Note
-Make sure you at least have the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
-Also, Visual Studio said something about missing files when i created this repo, and im not exactly sure what's missing... If you run into any problems, make an issue and i will fix it!
+Make sure you have at least the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
+Also, Visual Studio mentioned missing files when I created this repo. If you run into any issues, feel free to open an issue, and I'll fix it!
