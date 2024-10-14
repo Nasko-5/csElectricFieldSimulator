@@ -10,6 +10,7 @@ namespace raylibtest
         public Vector2 Position { get; set; }
 
         public bool isBeingDragged { get; set; }
+        public bool isChargeEdited { get; set; }
 
         private float _Charge;
 
@@ -24,7 +25,7 @@ namespace raylibtest
                 }
                 else if (value == 0)
                 {
-                    ParticleColor = Raylib.LIGHTGRAY;
+                    ParticleColor = Raylib.DARKGRAY;
                 }
                 else
                 {
@@ -55,7 +56,15 @@ namespace raylibtest
 
         public void Draw(Vector2 offset)
         {
+            Raylib.DrawCircle((int)Position.X + (int)offset.X, (int)Position.Y + (int)offset.Y, Size+10, Raylib.BLACK);
             Raylib.DrawCircle((int)Position.X + (int)offset.X, (int)Position.Y + (int)offset.Y, Size, ParticleColor);
+            
+            if(isChargeEdited)
+            {
+                string text = $"{Charge:f2}";
+                Raylib.DrawRectangle(((int)Position.X + (int)offset.X-(int)Size/2) - 10, (int)Position.Y + (int)offset.Y - (int)Size / 2, (int)Size*2, 12, Raylib.BLACK);
+                Raylib.DrawText(text, ((Position.X + offset.X) - Size / 2 ) - 10, (Position.Y + offset.Y) - Size / 2, 12, Raylib.WHITE);
+            }
         }
 
     }

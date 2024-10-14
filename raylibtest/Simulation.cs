@@ -27,7 +27,7 @@ namespace raylibtest
             List<Probe> probes = new();
             foreach (Particle particle in particles)
             {
-                if (particle.Charge < 0) continue;
+                if (particle.Charge <= 0) continue;
                 for (int i = 0; i < count; i++)
                 {
                     float angle = (float)(2 * Math.PI * i / count);
