@@ -19,6 +19,7 @@ Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 - **Hold Middle-click** in empty space and move the mouse to pan around the simulation.
 
 ## Installation
+Make sure you have at the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed!
 1. Go to the latest release on the [releases page](https://github.com/Nasko-5/csElectricFieldSimulator/releases), and download the file corresponding to your operating system
 3. Extract the contents of the `.zip` into a folder
 4. Run the csElectricFieldSimulator executable
@@ -33,5 +34,4 @@ Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 4. The build files will be created in a folder named after the platform you specified (e.g., `win-x64`, `linux-x64`, `osx-arm64`)
 
 ## Note
-Make sure you have at least the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
-Also, Visual Studio mentioned missing files when I created this repo. If you run into any issues, feel free to open an issue, and I'll fix it!
+Visual Studio mentioned missing files when I created this repo. If you run into any issues, feel free to open an issue, and I'll fix it!
