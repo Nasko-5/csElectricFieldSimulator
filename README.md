@@ -27,10 +27,10 @@ Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 1. Clone the repository with `git clone https://github.com/Nasko-5/csElectricFieldSimulator` 
 2. Navigate to the resulting folder
 3. Run the appropriate command for your operating system:
-  - Windows: `dotnet publish -r win-x64 -o ./win-x64`
-  - Linux: `dotnet publish -r linux-x64 -o ./linux-x64`
-  - macOS: `dotnet publish -r osx-arm64 -o ./osx-arm64`
-4. he build files will be created in a folder named after the platform you specified (e.g., `win-x64`, `linux-x64`, `osx-arm64`)
+    - Windows: `dotnet publish -r win-x64 -o ./win-x64`
+    - Linux: `dotnet publish -r linux-x64 -o ./linux-x64`
+    - macOS: `dotnet publish -r osx-arm64 -o ./osx-arm64`
+4. The build files will be created in a folder named after the platform you specified (e.g., `win-x64`, `linux-x64`, `osx-arm64`)
 
 ## Note
 Make sure you have at least the [.NET 6 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) installed! \
