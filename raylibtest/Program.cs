@@ -5,12 +5,14 @@ using System.Numerics;
 using System.Diagnostics;
 using csElectricFieldSimulator;
 
-const int screenWidth = 1200;
-const int screenHeight = 800;
+int screenWidth = 1200;
+int screenHeight = 800;
 
 Random random = new Random();
 
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT);
+Raylib.SetConfigFlags(ConfigFlags.FLAG_VSYNC_HINT);
 Raylib.InitWindow(screenWidth, screenHeight, "Electric Field Simulator");
 Raylib.SetTargetFPS(60);
 
@@ -169,6 +171,8 @@ bool changed = false;
 
 while (!Raylib.WindowShouldClose())
 {
+    screenWidth = Raylib.GetRenderWidth();
+    screenHeight = Raylib.GetRenderHeight();
     mousePos = Raylib.GetMousePosition();
     offsetMousePos = mousePos - offset;
 
@@ -501,7 +505,8 @@ while (!Raylib.WindowShouldClose())
             } 
         }
         catch { Console.WriteLine("lol whoops"); }
-        Visualization.DrawFieldLines(probes, offset);
+        if (g.showLines) Visualization.DrawFieldLines(probes, offset, g.lineThicknessSpinnerValue);
+        if (g.showDots) Visualization.DrawProbes(probes, offset);
         Visualization.DrawParticles(particles, offset);
     }
 

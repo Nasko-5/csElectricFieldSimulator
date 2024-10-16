@@ -23,15 +23,16 @@ namespace raylibtest
             foreach (Particle particle in particles) particle.Draw(offset);
         }
 
-        public static void DrawFieldLines(List<Probe> probes, Vector2 offset)
+        public static void DrawFieldLines(List<Probe> probes, Vector2 offset, int thickness)
         {
             foreach (Probe probe in probes)
             {
                 for (int index = 0; index < probe.Path.Count - 1; index++)
                 {
-                    Raylib.DrawLine(
-                        (int)probe.Path[index].X + (int)offset.X, (int)probe.Path[index].Y + (int)offset.Y,       
-                        (int)probe.Path[index + 1].X + (int)offset.X, (int)probe.Path[index + 1].Y + (int)offset.Y,
+                    Raylib.DrawLineEx(
+                        new Vector2((int)probe.Path[index].X + (int)offset.X, (int)probe.Path[index].Y + (int)offset.Y),       
+                        new Vector2((int)probe.Path[index + 1].X + (int)offset.X, (int)probe.Path[index + 1].Y + (int)offset.Y),
+                        thickness,
                         Raylib.WHITE
                     );
                 }
