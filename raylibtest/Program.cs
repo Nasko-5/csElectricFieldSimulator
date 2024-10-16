@@ -3,6 +3,7 @@ using Raylib_CsLo;
 using raylibtest;
 using System.Numerics;
 using System.Diagnostics;
+using csElectricFieldSimulator;
 
 const int screenWidth = 1200;
 const int screenHeight = 800;
@@ -149,6 +150,8 @@ List<Particle> generateRandomParticles(int particleCount)
 List<Particle> particles = new List<Particle>();
 
 List<Probe> probes = new();
+
+Gui g = new();
 
 Particle draggedParticle = null;
 Particle chargeEditParticle = null;
@@ -307,6 +310,8 @@ while (!Raylib.WindowShouldClose())
         Visualization.DrawFieldLines(probes, offset);
         Visualization.DrawParticles(particles, offset);
     }
+
+    g.DrawPollGui();
 
     Raylib.EndDrawing();
 }
