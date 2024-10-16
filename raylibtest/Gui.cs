@@ -115,6 +115,17 @@ namespace csElectricFieldSimulator
 
         //--------------------------------------------------------------------------------------
 
+        public (int probesPerCharge, int probeRadius, int lodQuality, int quality) getSettings()
+        {
+            return (
+                probesPerCharge: probesPerChargeSpinnerValue,
+                probeRadius: probeRadiusSpinnerValue,
+                lodQuality: lodQualitySpinnerValue,
+                quality: qualitySpinnerValue
+            );
+        }
+
+
         // i wrote this with the worst headache i've ever had
         // TODO: Refactor
         public bool isMouseOnControls(Vector2 mousePos)
@@ -327,6 +338,7 @@ namespace csElectricFieldSimulator
             eraseMode = false;
             dragMoveMode = false;
             zoomMode = false;
+            setChargeToZero = false;
         }
         // Button: RemoveButtonClear logic
         void RemoveButtonClear()
