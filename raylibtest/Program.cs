@@ -153,13 +153,20 @@ List<Particle> particles = new List<Particle>();
 
 List<Probe> probes = new();
 
+//RayGui.GuiSetStyle(
+//    (int)Raylib_CsLo.GuiControl.DEFAULT,
+//    (int)Raylib_CsLo.GuiDefaultProperty.TEXT_SIZE,
+//    20
+//);
+
 Gui g = new();
 
 Particle draggedParticle = null;
 Particle chargeEditParticle = null;
 
 Vector2 mousePos;
-Vector2 offsetMousePos;
+Vector2 screenspaceMousePos;
+
 
 Vector2 offset = new(0);
 Vector2? cameraDragInitialPos = null;
@@ -181,13 +188,15 @@ while (!Raylib.WindowShouldClose())
 {
     screenWidth = Raylib.GetRenderWidth();
     screenHeight = Raylib.GetRenderHeight();
-    mousePos = Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
-    offsetMousePos = mousePos - offset;
+
+    screenspaceMousePos = Raylib.GetMousePosition();
+    mousePos = Raylib.GetScreenToWorld2D(screenspaceMousePos, camera);
+
     Raylib.BeginMode2D(camera);
 
     Raylib.ClearBackground(Raylib.BLACK);
 
-    if (!g.isMouseOnControls(mousePos))
+    if (!g.isMouseOnControls(screenspaceMousePos))
     {
 
         // #################################
@@ -203,7 +212,7 @@ while (!Raylib.WindowShouldClose())
             {
                 foreach (Particle particle in particles)
                 {
-                    if (particle.isOver(offsetMousePos))
+                    if (particle.isOver(mousePos))
                     {
                         particle.isBeingDragged = true;
                         draggedParticle = particle;
@@ -215,7 +224,7 @@ while (!Raylib.WindowShouldClose())
             {
                 if (draggedParticle != null)
                 {
-                    draggedParticle.Position = offsetMousePos;
+                    draggedParticle.Position = mousePos;
                     changed = true;
                 }
             }
@@ -237,14 +246,14 @@ while (!Raylib.WindowShouldClose())
             {
                 if (draggedParticle == null)
                 {
-                    particles.Add(new Particle(leftCharge, offsetMousePos, 15));
+                    particles.Add(new Particle(leftCharge, mousePos, 15));
                     changed = true;
                 }
             } else if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_RIGHT_BUTTON))
             {
                 if (draggedParticle == null)
                 {
-                    particles.Add(new Particle(rightCharge, offsetMousePos, 15));
+                    particles.Add(new Particle(rightCharge, mousePos, 15));
                     changed = true;
                 }
             }
@@ -260,7 +269,7 @@ while (!Raylib.WindowShouldClose())
                 int pc = particles.Count;
                 for (int i = 0; i < pc; i++)
                 {
-                    if (particles[i].isOver(offsetMousePos))
+                    if (particles[i].isOver(mousePos))
                     {
                         particles.Remove(particles[i]);
                         changed = true;
@@ -287,7 +296,7 @@ while (!Raylib.WindowShouldClose())
                 {
                     foreach (Particle particle in particles)
                     {
-                        if (particle.isOver(offsetMousePos))
+                        if (particle.isOver(mousePos))
                         {
                             particle.Charge = 0;
                             
@@ -303,7 +312,7 @@ while (!Raylib.WindowShouldClose())
             {
                 foreach (Particle particle in particles)
                 {
-                    if (particle.isOver(offsetMousePos))
+                    if (particle.isOver(mousePos))
                     {
                         particle.isChargeEdited = true;
                         chargeEditParticle = particle;
@@ -379,7 +388,7 @@ while (!Raylib.WindowShouldClose())
                 if (cameraDragInitialPos != null)
                 {
                     Vector2 changeBy = (Vector2)(cameraDragInitialPos - mousePos);
-                    camera.zoom += changeBy.X / 1000;
+                    camera.zoom += changeBy.X/5000;
                 }
                 if (camera.zoom > 4) camera.zoom = 4;
                 if (camera.zoom < 0.1) camera.zoom = 0.1f; 

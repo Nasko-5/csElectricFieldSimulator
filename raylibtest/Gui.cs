@@ -125,7 +125,6 @@ namespace csElectricFieldSimulator
             );
         }
 
-
         // i wrote this with the worst headache i've ever had
         // TODO: Refactor
         public bool isMouseOnControls(Vector2 mousePos)
@@ -137,30 +136,35 @@ namespace csElectricFieldSimulator
                 result = true;
             }
 
-            if (directionVisBoxEditMode || showTools)
+            
+            if (showTools)
             {
                 if (addChargeMode && 
                     (isMouseInRectanlge(toolLayoutRecs[6], mousePos) ||
                      isMouseInRectanlge(toolLayoutRecs[7], mousePos)))
                 {
+                    Console.WriteLine("addcharge");
                     result = true;
                 }
 
                 if (editChargeMode &&
                     isMouseInRectanlge(toolLayoutRecs[5], mousePos))
                 {
-                   result = true;
+                    Console.WriteLine("editcharge");
+                    result = true;
                 }
 
                 if (eraseMode &&
                     isMouseInRectanlge(toolLayoutRecs[4], mousePos))
                 {
+                    Console.WriteLine("erase");
                     result = true;
                 }
 
                 if (toolLayoutRecs[0..4].Any(a => isMouseInRectanlge(a, mousePos) == true) ||
                     isMouseInRectanlge(toolLayoutRecs[8], mousePos))
                 {
+                    Console.WriteLine("therest");
                     result = true;
                 }
             }
@@ -172,7 +176,7 @@ namespace csElectricFieldSimulator
                     result = true;
                 }
             }
-
+            Console.WriteLine(result);
             return result;
         }
 
@@ -183,42 +187,7 @@ namespace csElectricFieldSimulator
                    rect.y < mousePos.Y && 
                    rect.y + rect.height > mousePos.Y;
         }
-        /*
-         * Global - 
-         *  new Rectangle( 80, 24, 48, 48),    // Button: settingsButton
-            new Rectangle( 24, 24, 48, 48 ),    // Button: toolButton
 
-           Tools only -
-            new Rectangle( 24, 96, 48, 24 ),    // Button: addButton
-            new Rectangle( 24, 128, 48, 24 ),    // Button: removeButton
-            new Rectangle( 24, 192, 48, 24 ),    // Button: dragMoveButton
-            new Rectangle( 24, 160, 48, 24 ),    // Button: editChargeButton
-            new Rectangle( 80, 128, 48, 24 ),    // Button: RemoveButtonClear
-            new Rectangle( 80, 160, 48, 24 ),    // Button: editChargeButtonSetZero
-            new Rectangle( 80, 96, 24, 24 ),    // Button: addButtonPositive
-            new Rectangle( 104, 96, 24, 24 ),    // Button: addButtonNegative
-           
-           Settings only -
-            new Rectangle( 136, 24, 272, 328 ),    // WindowBox: settingsWindowBox
-            new Rectangle( 144, 64, 256, 120 ),    // GroupBox: GroupBox012
-            new Rectangle( 272, 80, 112, 16 ),    // Label: Label015
-            new Rectangle( 272, 104, 120, 16 ),    // Label: Label016
-            new Rectangle( 152, 152, 120, 16 ),    // Spinner: probesPerChargeSpinner
-            new Rectangle( 272, 152, 120, 16 ),    // Label: Label018
-            new Rectangle( 272, 128, 120, 16 ),    // Label: Label020
-            new Rectangle( 144, 200, 256, 144 ),    // GroupBox: GroupBox021
-            new Rectangle( 152, 216, 112, 16 ),    // Spinner: lineThicknessSpinner
-            new Rectangle( 264, 216, 120, 16 ),    // Label: Label023
-            new Rectangle( 152, 80, 120, 16 ),    // Spinner: qualitySpinner
-            new Rectangle( 152, 104, 120, 16 ),    // Spinner: lodQualitySpinner
-            new Rectangle( 152, 128, 120, 16 ),    // Spinner: probeRadiusSpinner
-            new Rectangle( 152, 240, 112, 24 ),    // DropdownBox: directionVisBox
-            new Rectangle( 264, 240, 120, 24 ),    // Label: Label027
-            new Rectangle( 152, 272, 112, 24 ),    // Button: showLinesButton
-            new Rectangle( 152, 304, 112, 24 ),    // Button: showDotsButton
-         * 
-         * 
-         */
         public void DrawPollGui()
         {
 
