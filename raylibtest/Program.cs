@@ -164,6 +164,8 @@ Vector2 offsetMousePos;
 Vector2 offset = new(0);
 Vector2? cameraDragInitialPos = null;
 
+float toffset = 0;
+
 var settings = g.getSettings();
 var oldSettings = g.getSettings();
 
@@ -505,6 +507,7 @@ while (!Raylib.WindowShouldClose())
             } 
         }
         catch { Console.WriteLine("lol whoops"); }
+        Visualization.drawFieldLinesDirection(probes, 10, offset, toffset);
         if (g.showLines) Visualization.DrawFieldLines(probes, offset, g.lineThicknessSpinnerValue);
         if (g.showDots) Visualization.DrawProbes(probes, offset);
         Visualization.DrawParticles(particles, offset);
@@ -520,5 +523,6 @@ while (!Raylib.WindowShouldClose())
         changed = true;
     }
 
+    toffset = (toffset+0.001f)%0.20f;
     Raylib.EndDrawing();
 }
