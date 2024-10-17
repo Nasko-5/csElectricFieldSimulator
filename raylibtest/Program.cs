@@ -172,15 +172,18 @@ var oldSettings = g.getSettings();
 bool changed = false;
 
 Camera2D camera = new();
+camera.target = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
+camera.offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
+camera.rotation = 0.0f;
+camera.zoom = 2.0f;
 
 while (!Raylib.WindowShouldClose())
 {
     screenWidth = Raylib.GetRenderWidth();
     screenHeight = Raylib.GetRenderHeight();
-    mousePos = Raylib.GetMousePosition();
+    mousePos = Raylib.GetScreenToWorld2D(Raylib.GetMousePosition(), camera);
     offsetMousePos = mousePos - offset;
-
-    Raylib.BeginDrawing();
+    Raylib.BeginMode2D(camera);
 
     Raylib.ClearBackground(Raylib.BLACK);
 
@@ -272,6 +275,7 @@ while (!Raylib.WindowShouldClose())
                 changed = true;
             }
         }
+        
         // ####################
         // # CHARGE EDIT MODE #
         // ####################
@@ -309,9 +313,10 @@ while (!Raylib.WindowShouldClose())
                 }
             }
             if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON)) {
-                Vector2 changeBy = ((Vector2)(cameraDragInitialPos - mousePos));
+                
                 if (chargeEditParticle != null && cameraDragInitialPos != null)
                 {
+                    Vector2 changeBy = ((Vector2)(cameraDragInitialPos - mousePos));
                     chargeEditParticle.Charge += changeBy.Y / 5000;
                     changed = true;
                 }
@@ -327,9 +332,9 @@ while (!Raylib.WindowShouldClose())
             }
         }
 
-        // #############
-        // # MOVE MODE #
-        // #############
+        //#############
+        //# MOVE MODE #
+        //#############
         else if (g.dragMoveMode)
         {
             //Console.WriteLine($"are you even on");
@@ -346,7 +351,44 @@ while (!Raylib.WindowShouldClose())
                 Vector2 changeBy = ((Vector2)(cameraDragInitialPos - mousePos));
 
                 if (cameraDragInitialPos != null)
-                    offset += changeBy / 10;
+                    camera.target += changeBy;
+            }
+            if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
+            {
+
+                if (cameraDragInitialPos != null)
+                {
+                    cameraDragInitialPos = null;
+                }
+            }
+        }
+
+        //#############
+        //# ZOOM MODE #
+        //#############
+        else if (g.zoomMode)
+        {
+            //Console.WriteLine($"are you even on");
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (cameraDragInitialPos == null)
+                {
+                    cameraDragInitialPos = mousePos;
+                }
+            }
+            if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                //Console.WriteLine("shoukd mi");
+
+                Vector2 changeBy;
+
+                if (cameraDragInitialPos != null)
+                {
+                    changeBy = (Vector2)(cameraDragInitialPos - mousePos);
+                    camera.zoom += changeBy.X / 1000;
+                }
+                if (camera.zoom > 4) camera.zoom = 4;
+                if (camera.zoom < 0.1) camera.zoom = 0.1f; 
             }
             if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
             {
@@ -516,6 +558,8 @@ while (!Raylib.WindowShouldClose())
         Visualization.DrawParticles(particles, offset);
     }
 
+    Raylib.EndMode2D();
+
     oldSettings = g.getSettings();
 
     g.DrawPollGui();
@@ -526,5 +570,8 @@ while (!Raylib.WindowShouldClose())
     }
 
     toffset = (toffset+0.001f)%0.10f;
+
+    
+
     Raylib.EndDrawing();
 }
