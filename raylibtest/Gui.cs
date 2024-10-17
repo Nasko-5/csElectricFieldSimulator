@@ -137,7 +137,7 @@ namespace csElectricFieldSimulator
                 result = true;
             }
 
-            if (showTools)
+            if (directionVisBoxEditMode)
             {
                 if (addChargeMode && 
                     (isMouseInRectanlge(toolLayoutRecs[6], mousePos) ||
