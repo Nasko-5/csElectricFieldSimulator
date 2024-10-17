@@ -79,7 +79,7 @@ namespace raylibtest
             for (int i = 0; i < count; i++)
             {
                 points.Add(pointAlongPolyline(line, along+toffset));
-                along += dist;
+                along += dist;  
             }
 
             return points;

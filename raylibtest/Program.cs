@@ -171,6 +171,8 @@ var oldSettings = g.getSettings();
 
 bool changed = false;
 
+Camera2D camera = new();
+
 while (!Raylib.WindowShouldClose())
 {
     screenWidth = Raylib.GetRenderWidth();

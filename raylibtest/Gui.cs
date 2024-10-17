@@ -8,7 +8,7 @@ namespace csElectricFieldSimulator
         // csElectricFieldSimulator: controls initialization
         //----------------------------------------------------------------------------------
         // Define controls variables
-        bool settingsWindowBoxActive = false;            // WindowBox: settingsWindowBox
+        bool settingsWindowBoxActive = true;            // WindowBox: settingsWindowBox
         bool probesPerChargeSpinnerEditMode = false;
         public int probesPerChargeSpinnerValue = 25;            // Spinner: probesPerChargeSpinner
         bool lineThicknessSpinnerEditMode = false;
@@ -247,9 +247,9 @@ namespace csElectricFieldSimulator
                 if (RayGui.GuiButton(layoutRecs[9], "#043#")) ZoomButton();
             }
 
-            if (showSettings)
+            if (settingsWindowBoxActive)
             {
-                settingsWindowBoxActive = RayGui.GuiWindowBox(layoutRecs[8], "Settings");
+                settingsWindowBoxActive = !RayGui.GuiWindowBox(layoutRecs[8], "Settings");
                 RayGui.GuiGroupBox(layoutRecs[10], "Simulation");
                 RayGui.GuiLabel(layoutRecs[11], " Quality");
                 RayGui.GuiLabel(layoutRecs[12], " LoD Quality");
@@ -297,6 +297,7 @@ namespace csElectricFieldSimulator
         {
             // TODO: Implement control logic
             showSettings = !showSettings;
+            settingsWindowBoxActive = true;
         }
         // Button: toolButton logic
         void ToolButton()
