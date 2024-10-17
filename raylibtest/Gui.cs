@@ -143,28 +143,24 @@ namespace csElectricFieldSimulator
                     (isMouseInRectanlge(toolLayoutRecs[6], mousePos) ||
                      isMouseInRectanlge(toolLayoutRecs[7], mousePos)))
                 {
-                    Console.WriteLine("addcharge");
                     result = true;
                 }
 
                 if (editChargeMode &&
                     isMouseInRectanlge(toolLayoutRecs[5], mousePos))
                 {
-                    Console.WriteLine("editcharge");
                     result = true;
                 }
 
                 if (eraseMode &&
                     isMouseInRectanlge(toolLayoutRecs[4], mousePos))
                 {
-                    Console.WriteLine("erase");
                     result = true;
                 }
 
                 if (toolLayoutRecs[0..4].Any(a => isMouseInRectanlge(a, mousePos) == true) ||
                     isMouseInRectanlge(toolLayoutRecs[8], mousePos))
                 {
-                    Console.WriteLine("therest");
                     result = true;
                 }
             }
