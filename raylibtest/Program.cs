@@ -525,6 +525,6 @@ while (!Raylib.WindowShouldClose())
         changed = true;
     }
 
-    toffset = (toffset+0.001f)%0.20f;
+    toffset = (toffset+0.001f)%0.10f;
     Raylib.EndDrawing();
 }

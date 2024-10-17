@@ -8,7 +8,7 @@ namespace csElectricFieldSimulator
         // csElectricFieldSimulator: controls initialization
         //----------------------------------------------------------------------------------
         // Define controls variables
-        bool settingsWindowBoxActive = true;            // WindowBox: settingsWindowBox
+        bool settingsWindowBoxActive = false;            // WindowBox: settingsWindowBox
         bool probesPerChargeSpinnerEditMode = false;
         public int probesPerChargeSpinnerValue = 25;            // Spinner: probesPerChargeSpinner
         bool lineThicknessSpinnerEditMode = false;
@@ -20,7 +20,7 @@ namespace csElectricFieldSimulator
         bool probeRadiusSpinnerEditMode = false;
         public int probeRadiusSpinnerValue = 25;            // Spinner: probeRadiusSpinner
         bool directionVisBoxEditMode = false;
-        public int directionVisBoxActive = 0;            // DropdownBox: directionVisBox
+        public int directionVisBoxActive = 1;            // DropdownBox: directionVisBox
 
         // states
         public bool showTools = false;
@@ -137,7 +137,7 @@ namespace csElectricFieldSimulator
                 result = true;
             }
 
-            if (directionVisBoxEditMode)
+            if (directionVisBoxEditMode || showTools)
             {
                 if (addChargeMode && 
                     (isMouseInRectanlge(toolLayoutRecs[6], mousePos) ||
@@ -247,9 +247,10 @@ namespace csElectricFieldSimulator
                 if (RayGui.GuiButton(layoutRecs[9], "#043#")) ZoomButton();
             }
 
-            if (settingsWindowBoxActive)
+            if (showSettings)
             {
-                settingsWindowBoxActive = !RayGui.GuiWindowBox(layoutRecs[8], "Settings");
+                
+                showSettings = !RayGui.GuiWindowBox(layoutRecs[8], "Settings");
                 RayGui.GuiGroupBox(layoutRecs[10], "Simulation");
                 RayGui.GuiLabel(layoutRecs[11], " Quality");
                 RayGui.GuiLabel(layoutRecs[12], " LoD Quality");
@@ -297,7 +298,7 @@ namespace csElectricFieldSimulator
         {
             // TODO: Implement control logic
             showSettings = !showSettings;
-            settingsWindowBoxActive = true;
+            settingsWindowBoxActive = settingsWindowBoxActive;
         }
         // Button: toolButton logic
         void ToolButton()
