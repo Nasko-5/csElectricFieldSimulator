@@ -507,12 +507,12 @@ while (!Raylib.WindowShouldClose())
             } 
         }
         catch { Console.WriteLine("lol whoops"); }
-        Visualization.drawFieldLinesDirection(probes, 10, offset, toffset);
+        if (g.directionVisBoxActive == 0) Visualization.drawFieldLinesDirection(probes, 10, offset, 0);
+        else if (g.directionVisBoxActive == 1) Visualization.drawFieldLinesDirection(probes, 10, offset, toffset);
         if (g.showLines) Visualization.DrawFieldLines(probes, offset, g.lineThicknessSpinnerValue);
         if (g.showDots) Visualization.DrawProbes(probes, offset);
         Visualization.DrawParticles(particles, offset);
     }
-
 
     oldSettings = g.getSettings();
 
