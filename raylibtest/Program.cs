@@ -347,15 +347,14 @@ while (!Raylib.WindowShouldClose())
             }
             if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
             {
-                //Console.WriteLine("shoukd mi");
-                Vector2 changeBy = ((Vector2)(cameraDragInitialPos - mousePos));
-
                 if (cameraDragInitialPos != null)
+                {
+                    Vector2 changeBy = (Vector2)(cameraDragInitialPos - mousePos);
                     camera.target += changeBy;
+                }
             }
             if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
             {
-
                 if (cameraDragInitialPos != null)
                 {
                     cameraDragInitialPos = null;
@@ -368,7 +367,6 @@ while (!Raylib.WindowShouldClose())
         //#############
         else if (g.zoomMode)
         {
-            //Console.WriteLine($"are you even on");
             if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
             {
                 if (cameraDragInitialPos == null)
@@ -378,13 +376,9 @@ while (!Raylib.WindowShouldClose())
             }
             if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
             {
-                //Console.WriteLine("shoukd mi");
-
-                Vector2 changeBy;
-
                 if (cameraDragInitialPos != null)
                 {
-                    changeBy = (Vector2)(cameraDragInitialPos - mousePos);
+                    Vector2 changeBy = (Vector2)(cameraDragInitialPos - mousePos);
                     camera.zoom += changeBy.X / 1000;
                 }
                 if (camera.zoom > 4) camera.zoom = 4;
