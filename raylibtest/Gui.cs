@@ -172,7 +172,6 @@ namespace csElectricFieldSimulator
                     result = true;
                 }
             }
-            Console.WriteLine(result);
             return result;
         }
 

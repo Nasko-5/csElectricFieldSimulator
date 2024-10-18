@@ -388,7 +388,7 @@ while (!Raylib.WindowShouldClose())
                 if (cameraDragInitialPos != null)
                 {
                     Vector2 changeBy = (Vector2)(cameraDragInitialPos - mousePos);
-                    camera.zoom += changeBy.X/5000;
+                    camera.zoom += changeBy.X / 10000;
                 }
                 if (camera.zoom > 4) camera.zoom = 4;
                 if (camera.zoom < 0.1) camera.zoom = 0.1f; 
@@ -430,11 +430,13 @@ while (!Raylib.WindowShouldClose())
         Visualization.DrawParticles(particles, offset);
     }
 
-    Raylib.EndMode2D();
+    
 
     oldSettings = g.getSettings();
 
     g.DrawPollGui();
+
+    Raylib.EndMode2D();
 
     if (oldSettings != g.getSettings())
     {
