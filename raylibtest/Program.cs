@@ -43,7 +43,7 @@ List<Probe> SimParallel(List<Particle> particles, int probesPerCharge, int probe
     //timer.Start();
 
     int t = 0;
-    while (probeCount != 0 && t < 200)
+    while (probeCount != 0 && t < 250)
     {
         t++;
         Parallel.ForEach(probes, probe =>
