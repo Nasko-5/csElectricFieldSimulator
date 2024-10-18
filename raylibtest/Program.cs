@@ -165,6 +165,7 @@ Particle draggedParticle = null;
 Particle chargeEditParticle = null;
 
 Vector2 mousePos;
+Vector2 uiMousePos;
 Vector2 screenspaceMousePos;
 
 
@@ -182,7 +183,9 @@ Camera2D camera = new();
 camera.target = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
 camera.offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
 camera.rotation = 0.0f;
-camera.zoom = 2.0f;
+camera.zoom = 1.0f;
+
+g.scaleUi(2f);
 
 while (!Raylib.WindowShouldClose())
 {
@@ -191,8 +194,6 @@ while (!Raylib.WindowShouldClose())
 
     screenspaceMousePos = Raylib.GetMousePosition();
     mousePos = Raylib.GetScreenToWorld2D(screenspaceMousePos, camera);
-
-    Raylib.BeginMode2D(camera);
 
     Raylib.ClearBackground(Raylib.BLACK);
 
@@ -405,6 +406,8 @@ while (!Raylib.WindowShouldClose())
 
     }
 
+    Raylib.BeginMode2D(camera);
+
     Raylib.DrawRectangleLinesEx(new Rectangle(-1000+offset.X, -1000+offset.Y, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
 
     if (particles.Count != 0)
@@ -431,6 +434,7 @@ while (!Raylib.WindowShouldClose())
     }
 
     
+    Raylib.EndMode2D();
 
     oldSettings = g.getSettings();
 
@@ -443,7 +447,7 @@ while (!Raylib.WindowShouldClose())
         changed = true;
     }
 
-    toffset = (toffset+0.001f)%0.10f;
+    toffset = (toffset+0.001f)%0.15f;
 
     
 

@@ -26,7 +26,7 @@ namespace csElectricFieldSimulator
         public bool showTools = false;
         public bool showSettings = false;
         public bool chargePolarity = false; // false = negative ; true = postive
-        public bool dragMoveMode = false;
+        public bool dragMoveMode = true;
         public bool addChargeMode = false;
         public bool eraseMode = false;
         public bool editChargeMode = false;
@@ -37,6 +37,8 @@ namespace csElectricFieldSimulator
         public bool clearCharges = false;
         public bool showLines = true;
         public bool showDots = false;
+
+        Rectangle anchor = new Rectangle(80, 24, 48, 48);
 
         // Define controls rectangles
         Rectangle[] layoutRecs = new Rectangle[29]{
@@ -114,6 +116,30 @@ namespace csElectricFieldSimulator
 
 
         //--------------------------------------------------------------------------------------
+
+        public void scaleUi(float scaleFactor)
+        {
+            foreach (Rectangle[] def in new Rectangle[][] { layoutRecs, mainLayoutRecs, toolLayoutRecs, settingsLayoutRecs })
+            {
+                for (int index = 0;  index < def.Length; index++)
+                {
+                    Rectangle scaled = new Rectangle(
+                        def[index].x * scaleFactor,
+                        def[index].Y * scaleFactor,
+                        def[index].width * scaleFactor,
+                        def[index].height * scaleFactor
+                    );
+
+                    def[index] = scaled;
+                }
+            }
+            RayGui.GuiSetStyle(
+                (int)Raylib_CsLo.GuiControl.DEFAULT,
+                (int)Raylib_CsLo.GuiDefaultProperty.TEXT_SIZE,
+                (int)(10 * scaleFactor)
+            );
+
+        }
 
         public (int probesPerCharge, int probeRadius, int lodQuality, int quality) getSettings()
         {

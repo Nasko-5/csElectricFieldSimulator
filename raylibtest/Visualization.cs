@@ -73,13 +73,13 @@ namespace raylibtest
         {
             List<Vector2> points = new();
 
-            float dist = 1f / count;
+            float dist = (1f / count)*1.5f;
             float along = 0;
 
             for (int i = 0; i < count; i++)
             {
                 points.Add(pointAlongPolyline(line, along+toffset));
-                along += dist;  
+                along += dist;
             }
 
             return points;
