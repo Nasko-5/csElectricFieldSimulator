@@ -185,7 +185,7 @@ camera.offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight(
 camera.rotation = 0.0f;
 camera.zoom = 1.0f;
 
-g.scaleUi(2f);
+g.scaleUi(1f);
 
 while (!Raylib.WindowShouldClose())
 {
