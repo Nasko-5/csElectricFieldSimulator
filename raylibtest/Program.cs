@@ -415,6 +415,9 @@ while (!Raylib.WindowShouldClose())
         try { 
             if (changed) {
                 settings = g.getSettings();
+
+                if (settings.uiScale != 0) g.scaleUi(1 + settings.uiScale / 2f);
+                else g.scaleUi(1);
                 probes = SimParallel(
                     particles,
                     settings.probesPerCharge,
