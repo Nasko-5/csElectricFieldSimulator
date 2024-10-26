@@ -177,7 +177,7 @@ float toffset = 0;
 var settings = g.getSettings();
 var oldSettings = g.getSettings();
 
-bool changed = false;
+bool changed = true;
 
 Camera2D camera = new();
 camera.target = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
@@ -197,7 +197,7 @@ while (!Raylib.WindowShouldClose())
 
     Raylib.ClearBackground(Raylib.BLACK);
 
-    if (!g.isMouseOnControls(screenspaceMousePos))
+    if (!g.newIsMouseOnControls(screenspaceMousePos))
     {
 
         // #################################
@@ -410,12 +410,18 @@ while (!Raylib.WindowShouldClose())
 
     Raylib.DrawRectangleLinesEx(new Rectangle(-1000+offset.X, -1000+offset.Y, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
 
+    if (changed)
+    {
+        settings = g.getSettings();
+        if (settings.uiScale != 0) g.newScale(1 + settings.uiScale / 2f);
+        else g.newScale(1);
+    }
+
     if (particles.Count != 0)
     {
         try { 
             if (changed) {
                 settings = g.getSettings();
-
                 if (settings.uiScale != 0) g.scaleUi(1 + settings.uiScale / 2f);
                 else g.scaleUi(1);
                 probes = SimParallel(
