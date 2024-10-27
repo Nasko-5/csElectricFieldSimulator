@@ -40,8 +40,6 @@ namespace csElectricFieldSimulator
         public bool showLines = true;
         public bool showDots = false;
 
-        Rectangle anchor = new Rectangle(80, 24, 48, 48);
-
         public Dictionary<string, uiElement> newrecs = new Dictionary<string, uiElement>()
         {  // 
            // 
@@ -96,11 +94,10 @@ namespace csElectricFieldSimulator
             {  "showLinesButton", new uiElement( new Rectangle ( 136, 264, 104, 24  ) ,     6    ) }, // button
             {   "showDotsButton", new uiElement( new Rectangle ( 248, 264, 104, 24  ) ,     6    ) }, // button
             {  "directionVisBox", new uiElement( new Rectangle ( 136, 232, 104, 24  ) ,     6    ) }, // dropdown
-            {        "Button009", new uiElement( new Rectangle ( 64 , 96 , 48 , 24  ) ,     6    ) }, // ? unused
            // |________________|                               |____________________|  |_________|
         };
 
-        public void newScale(float scaleFactor) { 
+        public void scaleUi(float scaleFactor) { 
             foreach (KeyValuePair<string, uiElement> entry in newrecs)
             {
                 entry.Value.scaleRect(scaleFactor);
@@ -113,18 +110,7 @@ namespace csElectricFieldSimulator
             );
         }
 
-        public (int probesPerCharge, int probeRadius, int lodQuality, int quality, int uiScale) getSettings()
-        {
-            return (
-                probesPerCharge: probesPerChargeSpinnerValue,
-                probeRadius: probeRadiusSpinnerValue,
-                lodQuality: lodQualitySpinnerValue,
-                quality: qualitySpinnerValue,
-                uiScale: uiScaleSpinnerValue
-            );
-        }
-
-        public bool newIsMouseOnControls(Vector2 mousepos)
+        public bool IsMouseOnControls(Vector2 mousepos)
         {
             // If the mouse is on any of the uiElement/s, and has a ControlGroup of 1, return true
             if (newrecs.Any(a => a.Value.isMouseInRectanlge(mousepos) && a.Value.ControlGroup == 1))
@@ -148,6 +134,17 @@ namespace csElectricFieldSimulator
             }
 
             return false;
+        }
+        
+        public (int probesPerCharge, int probeRadius, int lodQuality, int quality, int uiScale) getSettings()
+        {
+            return (
+                probesPerCharge: probesPerChargeSpinnerValue,
+                probeRadius: probeRadiusSpinnerValue,
+                lodQuality: lodQualitySpinnerValue,
+                quality: qualitySpinnerValue,
+                uiScale: uiScaleSpinnerValue
+            );
         }
 
         public void DrawPollGui()

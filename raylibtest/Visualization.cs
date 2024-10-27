@@ -9,20 +9,20 @@ namespace raylibtest
     public static class Visualization
     {
 
-        public static void DrawProbes(List<Probe> probes, Vector2 offset)
+        public static void DrawProbes(List<Probe> probes)
         {
             foreach (Probe probe in probes) 
             { 
                 foreach (Vector2 pos in probe.Path)
                 {
-                    Raylib.DrawCircle((int)pos.X + (int)offset.X, (int)pos.Y + (int)offset.Y, probe.Size, probe.ParticleColor);
+                    Raylib.DrawCircle((int)pos.X, (int)pos.Y, probe.Size, probe.ParticleColor);
                 }
             }
         }
 
-        public static void DrawParticles(List<Particle> particles, Vector2 offset)
+        public static void DrawParticles(List<Particle> particles)
         {
-            foreach (Particle particle in particles) particle.Draw(offset);
+            foreach (Particle particle in particles) particle.Draw();
         }
 
         public static void DrawFieldLines(List<Probe> probes, int thickness)

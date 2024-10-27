@@ -54,16 +54,15 @@ namespace raylibtest
             return RayMath.Vector2Distance(mousePos, Position) <= Size;
         }
 
-        public void Draw(Vector2 offset)
+        public void Draw()
         {
-            Raylib.DrawCircle((int)Position.X + (int)offset.X, (int)Position.Y + (int)offset.Y, Size+10, Raylib.BLACK);
-            Raylib.DrawCircle((int)Position.X + (int)offset.X, (int)Position.Y + (int)offset.Y, Size, ParticleColor);
+            Raylib.DrawCircle((int)Position.X, (int)Position.Y, Size, ParticleColor);
             
             if(isChargeEdited)
             {
                 string text = $"{Charge:f2}";
-                Raylib.DrawRectangle(((int)Position.X + (int)offset.X-(int)Size/2) - 10, (int)Position.Y + (int)offset.Y - (int)Size / 2, (int)Size*2, 12, Raylib.BLACK);
-                Raylib.DrawText(text, ((Position.X + offset.X) - Size / 2 ) - 10, (Position.Y + offset.Y) - Size / 2, 12, Raylib.WHITE);
+                Raylib.DrawRectangle(((int)Position.X - (int)Size/2) - 10, (int)Position.Y - (int)Size / 2, (int)Size*2, 12, Raylib.BLACK);
+                Raylib.DrawText(text, ((Position.X) - Size / 2 ) - 10, (Position.Y) - Size / 2, 12, Raylib.WHITE);
             }
         }
 
