@@ -25,15 +25,15 @@ namespace raylibtest
             foreach (Particle particle in particles) particle.Draw(offset);
         }
 
-        public static void DrawFieldLines(List<Probe> probes, Vector2 offset, int thickness)
+        public static void DrawFieldLines(List<Probe> probes, int thickness)
         {
             foreach (Probe probe in probes)
             {
                 for (int index = 0; index < probe.Path.Count - 1; index++)
                 {
                     Raylib.DrawLineEx(
-                        new Vector2((int)probe.Path[index].X + (int)offset.X, (int)probe.Path[index].Y + (int)offset.Y),       
-                        new Vector2((int)probe.Path[index + 1].X + (int)offset.X, (int)probe.Path[index + 1].Y + (int)offset.Y),
+                        new Vector2((int)probe.Path[index].X, (int)probe.Path[index].Y),       
+                        new Vector2((int)probe.Path[index + 1].X, (int)probe.Path[index + 1].Y),
                         thickness,
                         Raylib.WHITE
                     );
@@ -42,29 +42,33 @@ namespace raylibtest
         }
 
 
-        public static void drawFieldLinesDirection(List<Probe> probes, int countArrows, Vector2 offset, float toffset)
+        public static void drawFieldLinesDirection(List<Probe> probes, int countArrows, float toffset)
         {
             foreach(Probe probe in probes)
             {
-                drawFieldLineDirection(probe, countArrows, offset, toffset);
+                drawFieldLineDirection(probe, countArrows, toffset);
             }
         }
 
-        public static void drawFieldLineDirection(Probe probe, int countArrows, Vector2 offset, float toffset)
+        public static void drawFieldLineDirection(Probe probe, int countArrows, float toffset)
         {
             List<Vector2> points = equallySpacedPointOnLine(probe.Path, countArrows, toffset);
 
             for(int i = 0; i < points.Count - 1; i++)
             {
                 Vector2 current = points[i];
+
+                if (current.X == 0 && current.Y == 0) continue;
+
                 Vector2 next = points[i + 1];
+                
                 //float angle = (float)Math.Atan2(current.Y - next.Y, current.X - next.X);
 
                 //float angleDegrees = angle * RayMath.RAD2DEG;
 
                 //int size = 10;
 
-                Raylib.DrawCircle((int)(current.X+offset.X), (int)(current.Y+offset.Y), 4, Raylib.WHITE);
+                Raylib.DrawCircle((int)(current.X), (int)(current.Y), 4, Raylib.WHITE);
             }
             
         }

@@ -68,32 +68,32 @@ namespace csElectricFieldSimulator
             {     "addButtonPos", new uiElement( new Rectangle ( 64 , 64 , 24 , 24  ) ,     3    ) },
             {     "addButtonNeg", new uiElement( new Rectangle ( 88 , 64 , 24 , 24  ) ,     3    ) },
             {   "editChargeSet0", new uiElement( new Rectangle ( 64 , 128, 48 , 24  ) ,     4    ) },
-            {      "removeClear", new uiElement( new Rectangle ( 24 , 160, 48 , 24  ) ,     5    ) }, 
+            {      "removeClear", new uiElement( new Rectangle ( 64 , 96 , 48 , 24  ) ,     5    ) }, 
            // |________________|                               |____________________|  |_________|
 
            // .________________.                               .____________________.  ._________.
            // |      NAME      |         ~ settings ~          |    CONTROL RECT    |  |  CTRLG  | (control group)
            // |````````````````|                               |````````````````````|  |`````````|
             { "settingWindowBox", new uiElement( new Rectangle ( 120, 8  , 280, 296 ) ,     6    ) },
-            {      "groupBox012", new uiElement( new Rectangle ( 128, 40 , 264, 120 ) ,     6    ) },
-            {      "groupBox021", new uiElement( new Rectangle ( 128, 168, 264, 128 ) ,     6    ) },
+            {      "simGroupBox", new uiElement( new Rectangle ( 128, 40 , 264, 120 ) ,     6    ) },
+            {      "visGroupBox", new uiElement( new Rectangle ( 128, 168, 264, 128 ) ,     6    ) },
            // +----------------+                               +--------------------+  +---------+
-            {         "qualityL", new uiElement( new Rectangle ( 240, 56 , 96 , 16  ) ,     6    ) }, // label
-            {      "lodQualityL", new uiElement( new Rectangle ( 240, 80 , 104, 12  ) ,     6    ) }, // label
-            {     "probeRadiusL", new uiElement( new Rectangle ( 240, 104, 112, 16  ) ,     6    ) }, // label
-            { "probesPerChargeL", new uiElement( new Rectangle ( 240, 128, 112, 16  ) ,     6    ) }, // label
-            {   "lineThicknessL", new uiElement( new Rectangle ( 240, 208, 112, 16  ) ,     6    ) }, // label
-            {         "uiScaleL", new uiElement( new Rectangle ( 240, 184, 112, 16  ) ,     6    ) }, // label
-            {  "fieldDirectionL", new uiElement( new Rectangle ( 240, 232, 152, 24  ) ,     6    ) }, // label
+            {         "qualityL", new uiElement( new Rectangle ( 240, 56 , 96 , 16  ) ,     6    ) }, // <+ labels
+            {      "lodQualityL", new uiElement( new Rectangle ( 240, 80 , 104, 12  ) ,     6    ) }, //  |
+            {     "probeRadiusL", new uiElement( new Rectangle ( 240, 104, 112, 16  ) ,     6    ) }, //  |
+            { "probesPerChargeL", new uiElement( new Rectangle ( 240, 128, 112, 16  ) ,     6    ) }, //  |
+            {   "lineThicknessL", new uiElement( new Rectangle ( 240, 208, 112, 16  ) ,     6    ) }, //  |
+            {         "uiScaleL", new uiElement( new Rectangle ( 240, 184, 112, 16  ) ,     6    ) }, //  |
+            {  "fieldDirectionL", new uiElement( new Rectangle ( 240, 232, 152, 24  ) ,     6    ) }, // <+
            // +----------------+                               +--------------------+  +---------+
-            {         "qualityS", new uiElement( new Rectangle ( 136, 56 , 104, 16  ) ,     6    ) }, // spinner
-            {      "lodQualityS", new uiElement( new Rectangle ( 136, 80 , 104, 16  ) ,     6    ) }, // spinner
-            {     "probeRadiusS", new uiElement( new Rectangle ( 136, 104, 104, 16  ) ,     6    ) }, // spinner
-            { "probesPerChargeS", new uiElement( new Rectangle ( 136, 128, 104, 16  ) ,     6    ) }, // spinner
-            {   "lineThicknessS", new uiElement( new Rectangle ( 136, 208, 104, 16  ) ,     6    ) }, // spinner
-            {         "uiScaleS", new uiElement( new Rectangle ( 136, 184, 104, 16  ) ,     6    ) }, // spinner
+            {         "qualityS", new uiElement( new Rectangle ( 136, 56 , 104, 16  ) ,     6    ) }, // <+ spinners
+            {      "lodQualityS", new uiElement( new Rectangle ( 136, 80 , 104, 16  ) ,     6    ) }, //  |
+            {     "probeRadiusS", new uiElement( new Rectangle ( 136, 104, 104, 16  ) ,     6    ) }, //  |
+            { "probesPerChargeS", new uiElement( new Rectangle ( 136, 128, 104, 16  ) ,     6    ) }, //  |
+            {   "lineThicknessS", new uiElement( new Rectangle ( 136, 208, 104, 16  ) ,     6    ) }, //  |
+            {         "uiScaleS", new uiElement( new Rectangle ( 136, 184, 104, 16  ) ,     6    ) }, // <+
            // +----------------+                               +--------------------+  +---------+
-            {  "showLinesButton", new uiElement( new Rectangle ( 64 , 96 , 48 , 24  ) ,     6    ) }, // button
+            {  "showLinesButton", new uiElement( new Rectangle ( 136, 264, 104, 24  ) ,     6    ) }, // button
             {   "showDotsButton", new uiElement( new Rectangle ( 248, 264, 104, 24  ) ,     6    ) }, // button
             {  "directionVisBox", new uiElement( new Rectangle ( 136, 232, 104, 24  ) ,     6    ) }, // dropdown
             {        "Button009", new uiElement( new Rectangle ( 64 , 96 , 48 , 24  ) ,     6    ) }, // ? unused
@@ -271,6 +271,12 @@ namespace csElectricFieldSimulator
             {
                 entry.Value.scaleRect(scaleFactor);
             }
+
+            RayGui.GuiSetStyle(
+                (int)Raylib_CsLo.GuiControl.DEFAULT,
+                (int)Raylib_CsLo.GuiDefaultProperty.TEXT_SIZE,
+                (int)(10 * scaleFactor)
+            );
         }
 
         // to be depricated and removed
@@ -414,45 +420,45 @@ namespace csElectricFieldSimulator
             if (showSettings)
             {
                 
-                showSettings = !RayGui.GuiWindowBox(layoutRecs[11], "#142#Settings");
-                RayGui.GuiGroupBox(layoutRecs[12], "Simulation");
-                RayGui.GuiLabel(layoutRecs[17], " Quality");
-                RayGui.GuiLabel(layoutRecs[18], " LoD Quality");
+                showSettings = !RayGui.GuiWindowBox(newrecs["settingWindowBox"].Scaled, "#142#Settings");
+                RayGui.GuiGroupBox(newrecs["simGroupBox"].Scaled, "Simulation");
+                RayGui.GuiLabel(newrecs["qualityL"].Scaled, " Quality");
+                RayGui.GuiLabel(newrecs["lodQualityL"].Scaled, " LoD Quality");
                 fixed (int* probesPerChargePtr = &probesPerChargeSpinnerValue)
                 {
-                    if (RayGui.GuiSpinner(layoutRecs[16], "", probesPerChargePtr, 0, 100, probesPerChargeSpinnerEditMode)) probesPerChargeSpinnerEditMode = !probesPerChargeSpinnerEditMode;
+                    if (RayGui.GuiSpinner(newrecs["probesPerChargeS"].Scaled, "", probesPerChargePtr, 0, 100, probesPerChargeSpinnerEditMode)) probesPerChargeSpinnerEditMode = !probesPerChargeSpinnerEditMode;
                 }
-                RayGui.GuiLabel(layoutRecs[20], " Probes per charge");
-                RayGui.GuiLabel(layoutRecs[19], " Probe radius");
-                RayGui.GuiGroupBox(layoutRecs[21], "Visualization");
+                RayGui.GuiLabel(newrecs["probesPerChargeL"].Scaled, " Probes per charge");
+                RayGui.GuiLabel(newrecs["probeRadiusL"].Scaled, " Probe radius");
+                RayGui.GuiGroupBox(newrecs["visGroupBox"].Scaled, "Visualization");
                 fixed (int* lineThicknessPtr = &lineThicknessSpinnerValue)
                 {
-                    if (RayGui.GuiSpinner(layoutRecs[23], "", lineThicknessPtr, 0, 100, lineThicknessSpinnerEditMode)) lineThicknessSpinnerEditMode = !lineThicknessSpinnerEditMode;
+                    if (RayGui.GuiSpinner(newrecs["lineThicknessS"].Scaled, "", lineThicknessPtr, 0, 100, lineThicknessSpinnerEditMode)) lineThicknessSpinnerEditMode = !lineThicknessSpinnerEditMode;
                 }
-                RayGui.GuiLabel(layoutRecs[28], " Field line thickness");
+                RayGui.GuiLabel(newrecs["lineThicknessL"].Scaled, " Field line thickness");
                 fixed (int* qualityPtr = &qualitySpinnerValue)
                 {
-                    if (RayGui.GuiSpinner(layoutRecs[13], "", qualityPtr, 0, 100, qualitySpinnerEditMode)) qualitySpinnerEditMode = !qualitySpinnerEditMode;
+                    if (RayGui.GuiSpinner(newrecs["qualityS"].Scaled, "", qualityPtr, 0, 100, qualitySpinnerEditMode)) qualitySpinnerEditMode = !qualitySpinnerEditMode;
                 }
                 fixed (int* lodQualityPtr = &lodQualitySpinnerValue)
                 {
-                    if (RayGui.GuiSpinner(layoutRecs[14], "", lodQualityPtr, 0, 100, lodQualitySpinnerEditMode)) lodQualitySpinnerEditMode = !lodQualitySpinnerEditMode;
+                    if (RayGui.GuiSpinner(newrecs["lodQualityS"].Scaled, "", lodQualityPtr, 0, 100, lodQualitySpinnerEditMode)) lodQualitySpinnerEditMode = !lodQualitySpinnerEditMode;
                 }
                 fixed (int* probeRadiusPtr = &probeRadiusSpinnerValue)
                 {
-                    if (RayGui.GuiSpinner(layoutRecs[15], "", probeRadiusPtr, 0, 100, probeRadiusSpinnerEditMode)) probeRadiusSpinnerEditMode = !probeRadiusSpinnerEditMode;
+                    if (RayGui.GuiSpinner(newrecs["probeRadiusS"].Scaled, "", probeRadiusPtr, 0, 100, probeRadiusSpinnerEditMode)) probeRadiusSpinnerEditMode = !probeRadiusSpinnerEditMode;
                 }
-                RayGui.GuiLabel(layoutRecs[29], " Show field direction");
-                RayGui.GuiLabel(layoutRecs[27], " UI scale");
+                RayGui.GuiLabel(newrecs["fieldDirectionL"].Scaled, " Show field direction");
+                RayGui.GuiLabel(newrecs["uiScaleL"].Scaled, " UI scale");
                 fixed (int* uiScalePtr = &uiScaleSpinnerValue)
                 {
-                    if (RayGui.GuiSpinner(layoutRecs[22], "", uiScalePtr, 0, 100, uiScaleSpinnerEditMode)) uiScaleSpinnerEditMode = !uiScaleSpinnerEditMode;
+                    if (RayGui.GuiSpinner(newrecs["uiScaleS"].Scaled, "", uiScalePtr, 0, 100, uiScaleSpinnerEditMode)) uiScaleSpinnerEditMode = !uiScaleSpinnerEditMode;
                 }
-                if (RayGui.GuiButton(layoutRecs[25], "Show Field Lines")) ShowLinesButton();
-                if (RayGui.GuiButton(layoutRecs[26], "Show dots")) ShowDotsButton();
+                if (RayGui.GuiButton(newrecs["showLinesButton"].Scaled, "Show Field Lines")) ShowLinesButton();
+                if (RayGui.GuiButton(newrecs["showDotsButton"].Scaled, "Show dots")) ShowDotsButton();
                 fixed (int* directionVisBoxActivePtr = &directionVisBoxActive)
                 {
-                    if (RayGui.GuiDropdownBox(layoutRecs[24], "Static;Animated;None", directionVisBoxActivePtr, directionVisBoxEditMode)) directionVisBoxEditMode = !directionVisBoxEditMode;
+                    if (RayGui.GuiDropdownBox(newrecs["directionVisBox"].Scaled, "Static;Animated;None", directionVisBoxActivePtr, directionVisBoxEditMode)) directionVisBoxEditMode = !directionVisBoxEditMode;
                 }
             }
 

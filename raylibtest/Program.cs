@@ -185,7 +185,7 @@ camera.offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight(
 camera.rotation = 0.0f;
 camera.zoom = 1.0f;
 
-g.scaleUi(1f);
+g.newScale(1f);
 
 while (!Raylib.WindowShouldClose())
 {
@@ -422,8 +422,8 @@ while (!Raylib.WindowShouldClose())
         try { 
             if (changed) {
                 settings = g.getSettings();
-                if (settings.uiScale != 0) g.scaleUi(1 + settings.uiScale / 2f);
-                else g.scaleUi(1);
+                if (settings.uiScale != 0) g.newScale(1 + settings.uiScale / 2f);
+                else g.newScale(1);
                 probes = SimParallel(
                     particles,
                     settings.probesPerCharge,
@@ -435,9 +435,9 @@ while (!Raylib.WindowShouldClose())
             } 
         }
         catch { Console.WriteLine("lol whoops"); }
-        if (g.directionVisBoxActive == 0) Visualization.drawFieldLinesDirection(probes, 11, offset, 0);
-        else if (g.directionVisBoxActive == 1) Visualization.drawFieldLinesDirection(probes, 10, offset, toffset);
-        if (g.showLines) Visualization.DrawFieldLines(probes, offset, g.lineThicknessSpinnerValue);
+        if (g.directionVisBoxActive == 0) Visualization.drawFieldLinesDirection(probes, 11, 0);
+        else if (g.directionVisBoxActive == 1) Visualization.drawFieldLinesDirection(probes, 10, toffset);
+        if (g.showLines) Visualization.DrawFieldLines(probes, g.lineThicknessSpinnerValue);
         if (g.showDots) Visualization.DrawProbes(probes, offset);
         Visualization.DrawParticles(particles, offset);
     }
