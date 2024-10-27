@@ -112,8 +112,12 @@ List<Probe> SimParallel(List<Particle> particles, int probesPerCharge, int probe
 
                         probe.disabledPosition = probe.Position;
                     }
+                    else 
+                    { 
+                        probe.disabledPosition = particle.Position;
+                        probe.hitNegCharge = true;
+                    } 
 
-                    probe.disabledPosition = particle.Position;
 
                     probe.Disabled = true;
                     probeCount--;

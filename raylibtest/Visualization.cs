@@ -29,7 +29,7 @@ namespace raylibtest
 
         public static void DrawFieldLines(List<Probe> probes, int thickness)
         {
-            foreach (Probe probe in probes)
+            foreach (Probe probe in probes.Where(a => !a.hitNegCharge))
             {
                 for (int index = 0; index < probe.Path.Count - 1; index++)
                 {
@@ -46,7 +46,7 @@ namespace raylibtest
 
         public static void drawFieldLinesDirection(List<Probe> probes, int countArrows, float toffset)
         {
-            foreach(Probe probe in probes)
+            foreach(Probe probe in probes.Where(a => !a.hitNegCharge))
             {
                 drawFieldLineDirection(probe, countArrows, toffset);
             }

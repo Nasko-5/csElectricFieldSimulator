@@ -23,6 +23,7 @@ namespace raylibtest
         public bool Disabled;
 
         public Vector2 disabledPosition;
+        public bool hitNegCharge;
 
         public Probe(float charge, Vector2 position, float size = 2)
         {
