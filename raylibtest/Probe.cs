@@ -22,6 +22,9 @@ namespace raylibtest
         public List<Vector2> Path { get; set; }
         public bool Disabled;
 
+        public Vector2 disabledPosition;
+        public bool hitNegCharge;
+
         public Probe(float charge, Vector2 position, float size = 2)
         {
                 
@@ -31,6 +34,7 @@ namespace raylibtest
             Charge = charge; 
             ParticleColor = Raylib.WHITE;
             Disabled = false;
+            disabledPosition = Vector2.Zero;
         }
 
 

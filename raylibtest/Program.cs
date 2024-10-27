@@ -3,23 +3,26 @@ using Raylib_CsLo;
 using raylibtest;
 using System.Numerics;
 using System.Diagnostics;
+using csElectricFieldSimulator;
 
-const int screenWidth = 1200;
-const int screenHeight = 800;
+int screenWidth = 1200;
+int screenHeight = 800;
 
 Random random = new Random();
 
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT);
+Raylib.SetConfigFlags(ConfigFlags.FLAG_VSYNC_HINT);
 Raylib.InitWindow(screenWidth, screenHeight, "Electric Field Simulator");
 Raylib.SetTargetFPS(60);
 
 
 Console.WriteLine(new string('*', 40));
 
-List<Probe> SimParallel(List<Particle> particles)
+List<Probe> SimParallel(List<Particle> particles, int probesPerCharge, int probeRadius, int LoDQuality, int quality)
 {
     // generate our probes
-    List<Probe> probes = Simulation.generateProbes(particles, 25, 50);
+    List<Probe> probes = Simulation.generateProbes(particles, probeRadius, probesPerCharge);
 
     Vector4 bbox = Visualization.getParticleBoundingBox(particles);
 
@@ -40,7 +43,7 @@ List<Probe> SimParallel(List<Particle> particles)
     //timer.Start();
 
     int t = 0;
-    while (probeCount != 0 && t < 200)
+    while (probeCount != 0 && t < 250)
     {
         t++;
         Parallel.ForEach(probes, probe =>
@@ -69,11 +72,11 @@ List<Probe> SimParallel(List<Particle> particles)
                     probePos.Y > LoDBox.Y &&
                     probePos.Y < LoDBox.Y + LoDBox.W)
                 {
-                    E = RayMath.Vector2Normalize(E) * (4.5f + dist); // sprase-ify points
+                    E = RayMath.Vector2Normalize(E) * (quality + dist); // sprase-ify points
                 }
                 else
                 {
-                    E = RayMath.Vector2Normalize(E) * (10 + dist);
+                    E = RayMath.Vector2Normalize(E) * (LoDQuality + dist);
                 }
 
                 // Point culling based on 
@@ -106,12 +109,21 @@ List<Probe> SimParallel(List<Particle> particles)
                         {
                             probe.Path[probe.Path.Count - 1] = cutoffPos;
                         }
+
+                        probe.disabledPosition = probe.Position;
                     }
+                    else 
+                    { 
+                        probe.disabledPosition = particle.Position;
+                        //probe.hitNegCharge = true;
+                    } 
+
 
                     probe.Disabled = true;
                     probeCount--;
                     return;
                 }
+
 
                 // Add vector to the probe's position
                 probe.Position += E;
@@ -150,163 +162,312 @@ List<Particle> particles = new List<Particle>();
 
 List<Probe> probes = new();
 
+//RayGui.GuiSetStyle(
+//    (int)Raylib_CsLo.GuiControl.DEFAULT,
+//    (int)Raylib_CsLo.GuiDefaultProperty.TEXT_SIZE,
+//    20
+//);
+
+Gui g = new();
+
 Particle draggedParticle = null;
 Particle chargeEditParticle = null;
 
 Vector2 mousePos;
-Vector2 offsetMousePos;
+Vector2 uiMousePos;
+Vector2 screenspaceMousePos;
+
 
 Vector2 offset = new(0);
 Vector2? cameraDragInitialPos = null;
 
-bool changed = false;
+float toffset = 0;
+
+var settings = g.getSettings();
+var oldSettings = g.getSettings();
+
+bool changed = true;
+
+Camera2D camera = new();
+camera.target = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
+camera.offset = new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() / 2);
+camera.rotation = 0.0f;
+camera.zoom = 1.0f;
+
+g.scaleUi(1f);
 
 while (!Raylib.WindowShouldClose())
 {
-    mousePos = Raylib.GetMousePosition();
-    offsetMousePos = mousePos - offset;
+    screenWidth = Raylib.GetRenderWidth();
+    screenHeight = Raylib.GetRenderHeight();
 
-    Raylib.BeginDrawing();
+    screenspaceMousePos = Raylib.GetMousePosition();
+    mousePos = Raylib.GetScreenToWorld2D(screenspaceMousePos, camera);
 
     Raylib.ClearBackground(Raylib.BLACK);
 
-    // right mouse button
-    if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_RIGHT_BUTTON))
+    if (!g.IsMouseOnControls(screenspaceMousePos))
     {
-        if (draggedParticle == null && chargeEditParticle == null)
+
+        // #################################
+        // # ADD CHARGE / DRAG CHARGE MODE #
+        // #################################
+
+        // Handles adding charges... and dragging them, since it's more convenient]
+        if (g.addChargeMode)
         {
-            int pc = particles.Count;
-            for (int i = 0; i < pc; i++)
+
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON) ||
+                Raylib.IsMouseButtonPressed(Raylib.MOUSE_RIGHT_BUTTON))
             {
-                if (particles[i].isOver(offsetMousePos))
+                foreach (Particle particle in particles)
                 {
-                    particles.Remove(particles[i]);
-                    break;
+                    if (particle.isOver(mousePos))
+                    {
+                        particle.isBeingDragged = true;
+                        draggedParticle = particle;
+                    }
                 }
             }
-            int npc = particles.Count;
-
-            if (pc == npc)
+            else if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON) ||
+                     Raylib.IsMouseButtonDown(Raylib.MOUSE_RIGHT_BUTTON))
             {
-                particles.Add(new Particle(-Constants.e, offsetMousePos, 15));
-            }
-            changed = true;
-        }
-    }
-
-    // Left mouse button,
-    if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
-    {
-        foreach (Particle particle in particles)
-        {
-            if (particle.isOver(offsetMousePos))
-            {
-                particle.isBeingDragged = true;
-                draggedParticle = particle;
-            }
-        }
-
-        if (draggedParticle == null)
-        {
-            particles.Add(new Particle(Constants.e, offsetMousePos, 15));
-        }
-        changed = true;
-    } else if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
-    {
-        if (draggedParticle != null)
-        {
-            draggedParticle.Position = offsetMousePos;
-            changed = true;
-        }
-    } 
-    else if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
-    {
-        if (draggedParticle != null)
-        {
-            draggedParticle.isBeingDragged = false;
-            draggedParticle = null;
-            changed = true;
-        }
-    }
-
-    // Middle mouse button
-    if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_MIDDLE_BUTTON))
-    {
-        // Camera dragging
-        if (cameraDragInitialPos == null)
-        {
-            cameraDragInitialPos = mousePos;
-        }
-
-        // Charge editing
-    
-            foreach (Particle particle in particles)
-            {
-                if (particle.isOver(offsetMousePos))
+                if (draggedParticle != null)
                 {
-                    particle.isChargeEdited = true;
-                    chargeEditParticle = particle;
+                    draggedParticle.Position = mousePos;
+                    changed = true;
+                }
+            }
+            else if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON) ||
+                     Raylib.IsMouseButtonReleased(Raylib.MOUSE_RIGHT_BUTTON))
+            {
+                if (draggedParticle != null)
+                {
+                    draggedParticle.isBeingDragged = false;
+                    draggedParticle = null;
+                    changed = true;
+                }
+            }
+
+            float leftCharge = g.chargePolarity ? 1 : -1;
+            float rightCharge = !g.chargePolarity ? 1 : -1;
+
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (draggedParticle == null)
+                {
+                    particles.Add(new Particle(leftCharge, mousePos, 15));
+                    changed = true;
+                }
+            } else if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_RIGHT_BUTTON))
+            {
+                if (draggedParticle == null)
+                {
+                    particles.Add(new Particle(rightCharge, mousePos, 15));
+                    changed = true;
+                }
+            }
+        } 
+
+        // ##############
+        // # ERASE MODE #
+        // ##############
+        else if (g.eraseMode)
+        {
+            if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                int pc = particles.Count;
+                for (int i = 0; i < pc; i++)
+                {
+                    if (particles[i].isOver(mousePos))
+                    {
+                        particles.Remove(particles[i]);
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+            if (g.clearCharges)
+            {
+                particles.Clear();
+                g.clearCharges = false;
+                changed = true;
+            }
+        }
+        
+        // ####################
+        // # CHARGE EDIT MODE #
+        // ####################
+        else if (g.editChargeMode)
+        {
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (g.setChargeToZero)
+                {
+                    foreach (Particle particle in particles)
+                    {
+                        if (particle.isOver(mousePos))
+                        {
+                            particle.Charge = 0;
+                            
+                            changed = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                foreach (Particle particle in particles)
+                {
+                    if (particle.isOver(mousePos))
+                    {
+                        particle.isChargeEdited = true;
+                        chargeEditParticle = particle;
+                        cameraDragInitialPos = mousePos;
+                        break;
+                    }
+                }
+            }
+            if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON)) {
+                
+                if (chargeEditParticle != null && cameraDragInitialPos != null)
+                {
+                    Vector2 changeBy = ((Vector2)(cameraDragInitialPos - mousePos));
+                    chargeEditParticle.Charge += changeBy.Y / 5000;
+                    changed = true;
+                }
+            }
+            if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (chargeEditParticle != null)
+                {
+                    chargeEditParticle.isChargeEdited = false;
+                    chargeEditParticle = null;
+
+                }
+            }
+        }
+
+        //#############
+        //# MOVE MODE #
+        //#############
+        else if (g.dragMoveMode)
+        {
+            //Console.WriteLine($"are you even on");
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (cameraDragInitialPos == null)
+                {
                     cameraDragInitialPos = mousePos;
                 }
             }
-
-    } 
-    if (Raylib.IsMouseButtonDown(Raylib.MOUSE_MIDDLE_BUTTON) )
-    {
-        Vector2 changeBy = ((Vector2)(cameraDragInitialPos - mousePos));
-
-        if (chargeEditParticle != null && cameraDragInitialPos != null)
-        {
-            if (Raylib.IsMouseButtonDown(Raylib.MOUSE_RIGHT_BUTTON))
+            if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
             {
-                chargeEditParticle.Charge = 0;
+                if (cameraDragInitialPos != null)
+                {
+                    Vector2 changeBy = (Vector2)(cameraDragInitialPos - mousePos);
+                    camera.target += changeBy;
+                }
             }
-            else
+            if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
             {
-                chargeEditParticle.Charge += changeBy.Y / 5000;
+                if (cameraDragInitialPos != null)
+                {
+                    cameraDragInitialPos = null;
+                }
             }
-            changed = true;
         }
 
-        if (cameraDragInitialPos != null && chargeEditParticle == null)
-            offset += changeBy / 10;
-    } 
-    if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_MIDDLE_BUTTON))
-    {
-        if (chargeEditParticle != null)
+        //#############
+        //# ZOOM MODE #
+        //#############
+        else if (g.zoomMode)
         {
-            chargeEditParticle.isChargeEdited = false;
-            chargeEditParticle = null;
-            
+            if (Raylib.IsMouseButtonPressed(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (cameraDragInitialPos == null)
+                {
+                    cameraDragInitialPos = mousePos;
+                }
+            }
+            if (Raylib.IsMouseButtonDown(Raylib.MOUSE_LEFT_BUTTON))
+            {
+                if (cameraDragInitialPos != null)
+                {
+                    Vector2 changeBy = (Vector2)(cameraDragInitialPos - mousePos);
+                    camera.zoom += changeBy.X / 10000;
+                }
+                if (camera.zoom > 4) camera.zoom = 4;
+                if (camera.zoom < 0.1) camera.zoom = 0.1f; 
+            }
+            if (Raylib.IsMouseButtonReleased(Raylib.MOUSE_LEFT_BUTTON))
+            {
+
+                if (cameraDragInitialPos != null)
+                {
+                    cameraDragInitialPos = null;
+                }
+            }
         }
 
-        if (cameraDragInitialPos != null)
-        {
-            cameraDragInitialPos = null;
-        }
     }
 
-    if (Raylib.IsMouseButtonDown(Raylib.MOUSE_MIDDLE_BUTTON) && Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
+    Raylib.BeginMode2D(camera);
+
+    Raylib.DrawRectangleLinesEx(new Rectangle(-1000, -1000, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
+
+    if (changed)
     {
-        particles.Clear();
+        settings = g.getSettings();
+        if (settings.uiScale != 0) g.scaleUi(1 + settings.uiScale / 2f);
+        else g.scaleUi(1);
     }
-
-    if (Raylib.IsKeyPressed(KeyboardKey.KEY_ONE))
-    {
-        particles.AddRange(generateRandomParticles(15));
-        changed = true;
-    }
-
-
-    Raylib.DrawRectangleLinesEx(new Rectangle(-1000+offset.X, -1000+offset.Y, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
 
     if (particles.Count != 0)
     {
-        try { if (changed) { probes = SimParallel(particles); changed = false; } }
+        try { 
+            if (changed) {
+                settings = g.getSettings();
+                if (settings.uiScale != 0) g.scaleUi(1 + settings.uiScale / 2f);
+                else g.scaleUi(1);
+                probes = SimParallel(
+                    particles,
+                    settings.probesPerCharge,
+                    settings.probeRadius,
+                    settings.lodQuality,
+                    settings.quality
+                    ); 
+                changed = false;
+            } 
+        }
         catch { Console.WriteLine("lol whoops"); }
-        Visualization.DrawFieldLines(probes, offset);
-        Visualization.DrawParticles(particles, offset);
+        if (g.directionVisBoxActive == 0) Visualization.drawFieldLinesDirection(probes, 10, 0);
+        else if (g.directionVisBoxActive == 1) Visualization.drawFieldLinesDirection(probes, 10, toffset);
+        if (g.showLines) Visualization.DrawFieldLines(probes, g.lineThicknessSpinnerValue);
+        if (g.showDots) Visualization.DrawProbes(probes);
+        Visualization.DrawParticles(particles);
     }
+
+    
+    Raylib.EndMode2D();
+
+    oldSettings = g.getSettings();
+
+    g.DrawPollGui();
+
+    Raylib.EndMode2D();
+
+    if (oldSettings != g.getSettings())
+    {
+        changed = true;
+    }
+
+    toffset = (toffset+0.001f)%0.15f;
+
+    
 
     Raylib.EndDrawing();
 }
