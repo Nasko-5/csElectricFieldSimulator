@@ -9,6 +9,8 @@ namespace raylibtest
     public static class Visualization
     {
 
+
+
         public static void DrawProbes(List<Probe> probes)
         {
             foreach (Probe probe in probes) 
@@ -53,24 +55,58 @@ namespace raylibtest
         public static void drawFieldLineDirection(Probe probe, int countArrows, float toffset)
         {
             List<Vector2> points = equallySpacedPointOnLine(probe.Path, countArrows, toffset);
+            List<Vector2> pointToPoints = equallySpacedPointOnLine(probe.Path, countArrows, toffset+0.001f);
 
-            for(int i = 0; i < points.Count - 1; i++)
+            for (int i = 0; i < points.Count - 1; i++)
             {
                 Vector2 current = points[i];
 
+                // skip if the current coordinate is 0,0 
                 if (current.X == 0 && current.Y == 0) continue;
 
-                Vector2 next = points[i + 1];
-                
-                //float angle = (float)Math.Atan2(current.Y - next.Y, current.X - next.X);
+                Vector2 next = pointToPoints[i];
 
-                //float angleDegrees = angle * RayMath.RAD2DEG;
+                // if the next position is at 0,0, set it to the position at which the probe was disabled
+                next = next == Vector2.Zero ? probe.disabledPosition : next;
 
-                //int size = 10;
+                // calculate angle
+                float angle = (float)Math.Atan2(next.Y - current.Y, next.X - current.X);
 
-                Raylib.DrawCircle((int)(current.X), (int)(current.Y), 4, Raylib.WHITE);
+                float triangleBase = 5;
+                float triangleHeight = 10;
+
+                Vector2 p1 = new Vector2(
+                    (float)(current.X + triangleHeight * Math.Cos(angle)),
+                    (float)(current.Y + triangleHeight * Math.Sin(angle))
+                );
+
+                // 1.5708rad = 90deg
+                Vector2 p2 = new Vector2(
+                    (float)(current.X + triangleBase * Math.Cos(angle - 1.5708)),
+                    (float)(current.Y + triangleBase * Math.Sin(angle - 1.5708))
+                );
+
+                Vector2 p3 = new Vector2(
+                    (float)(current.X + triangleBase * Math.Cos(angle + 1.5708)),
+                    (float)(current.Y + triangleBase * Math.Sin(angle + 1.5708))
+                );
+
+
+                Raylib.DrawTriangle(p2, p3, p1, Raylib.WHITE);
+
+                //// debug
+                //if (i == 3)
+                //{
+                //    Raylib.DrawCircle((int)(current.X), (int)(current.Y), 2, Raylib.BLUE);
+                //    Raylib.DrawCircle((int)(next.X), (int)(next.Y), 5, Raylib.GREEN);
+                //    Raylib.DrawLine((int)(current.X), (int)(current.Y), (int)(next.X), (int)(next.Y), Raylib.YELLOW);
+                //} else
+                //{
+                //    Raylib.DrawCircle((int)(current.X), (int)(current.Y), 2, Raylib.RED);
+                //    Raylib.DrawCircle((int)(next.X), (int)(next.Y), 5, Raylib.GREEN);
+                //    Raylib.DrawLine((int)(current.X), (int)(current.Y), (int)(next.X), (int)(next.Y), Raylib.RED);
+                //}
             }
-            
         }
 
         public static List<Vector2> equallySpacedPointOnLine(List<Vector2> line, int count, float toffset)

@@ -109,12 +109,17 @@ List<Probe> SimParallel(List<Particle> particles, int probesPerCharge, int probe
                         {
                             probe.Path[probe.Path.Count - 1] = cutoffPos;
                         }
+
+                        probe.disabledPosition = probe.Position;
                     }
+
+                    probe.disabledPosition = particle.Position;
 
                     probe.Disabled = true;
                     probeCount--;
                     return;
                 }
+
 
                 // Add vector to the probe's position
                 probe.Position += E;
