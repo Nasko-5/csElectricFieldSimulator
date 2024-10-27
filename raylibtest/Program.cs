@@ -408,7 +408,7 @@ while (!Raylib.WindowShouldClose())
 
     Raylib.BeginMode2D(camera);
 
-    Raylib.DrawRectangleLinesEx(new Rectangle(-1000+offset.X, -1000+offset.Y, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
+    Raylib.DrawRectangleLinesEx(new Rectangle(-1000, -1000, screenWidth + 2000, screenHeight + 2000), 2, Raylib.YELLOW);
 
     if (changed)
     {
@@ -435,7 +435,7 @@ while (!Raylib.WindowShouldClose())
             } 
         }
         catch { Console.WriteLine("lol whoops"); }
-        if (g.directionVisBoxActive == 0) Visualization.drawFieldLinesDirection(probes, 11, 0);
+        if (g.directionVisBoxActive == 0) Visualization.drawFieldLinesDirection(probes, 10, 0);
         else if (g.directionVisBoxActive == 1) Visualization.drawFieldLinesDirection(probes, 10, toffset);
         if (g.showLines) Visualization.DrawFieldLines(probes, g.lineThicknessSpinnerValue);
         if (g.showDots) Visualization.DrawProbes(probes);

@@ -108,6 +108,8 @@ namespace csElectricFieldSimulator
                 (int)Raylib_CsLo.GuiDefaultProperty.TEXT_SIZE,
                 (int)(10 * scaleFactor)
             );
+
+            RayGui.GuiSetIconScale((uint)(scaleFactor/1.25));
         }
 
         public bool IsMouseOnControls(Vector2 mousepos)
