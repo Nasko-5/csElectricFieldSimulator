@@ -2,7 +2,7 @@
 
 ![Gif showcasing the program](https://github.com/user-attachments/assets/0718bbc4-e1bd-47b5-ad11-239344e5ab9c)
 
-Small application I made to practice some things I learned in physics class! \
+Small application I made (with the help of [@BuzzZ80](https://github.com/BuzzZ80) !) to practice some things I learned in physics class! \
 Made with [Raylib-CsLo](https://github.com/NotNotTech/Raylib-CsLo)
 
 ## Controls
